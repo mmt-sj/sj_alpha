@@ -4,42 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>index</title>
-    <link href="css/default.css" rel="stylesheet">
+    <link href="css/default.css" rel="stylesheet" media="screen">
     <script src="js/default.js" ></script>
+
+
 </head>
 <body>
-<div class="container-fluid ">
-    <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-    </div>
-    <div class="row">
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-        <div class="col-md-1">.col-md-1</div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">.col-md-8</div>
-        <div class="col-md-4">.col-md-4</div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">.col-xs-1</div>
-        <div class="col-md-6">.col-xs-1</div>
-    </div>
+<div class="containe">
+    <form class="form-horizontal ">
+        <div class="control-group">
+            <div class="controls input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                <input type="text" id="inputName" placeholder="请输入姓名">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <label class="radio inline">
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                    男
+                </label>
+                <label class="radio inline">
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    女
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls input-prepend">
+                <span class="add-on"><i class="icon-filter"></i></span>
+                <input type="number" id="inputStudentNumber" placeholder="请输入学号">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input type="tel" id="inputPhone" placeholder="请输入电话号码">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <select>
+                    <option>请选择院系</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <textarea rows="4" placeholder="请输入申请理由（不超过200字）"></textarea>
+            </div>
+        </div>
+    </form>
+
 </div>
 </body>
 </html>
