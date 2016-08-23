@@ -5,73 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>index</title>
     <link href="css/default.css" rel="stylesheet" media="screen">
-    <script src="js/default.js" ></script>
-</head >
-<body >
-<div class="container-fluid pagination-centered" >
-   <div class="page-header">
-       <img width="100px" height="100px" src="img/icon.png"alt="图标" class="img-circle">
-   </div>
-    <form >
-        <div class="control-group" >
-            <div class="controls input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                <input type="text" id="inputName" placeholder="请输入姓名">
+
+    <script src="js/jquery-3.1.0.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="js/background-blur.js"></script>
+
+</head>
+<body>
+<div class="container background-img">
+    <div class="content vertical-container">
+        <div class=" pagination-centered ">
+            <div class="page-header">
+                <img width="100px" height="100px" src="img/icon.png" alt="图标" class="img-circle">
+            </div>
+            <form>
+                <div class="control-group">
+                    <div class="controls input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input type="text" id="inputName" placeholder="请输入姓名">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls input-prepend ">
+                        <span class="add-on"><i class="icon-filter"></i></span>
+                        <input type="text" id="inputStudentNumber" placeholder="请输入学号">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input type="tel" id="inputPhone" placeholder="请输入电话号码">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <select>
+                            <option>请选择院系</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls" style="color: #fff;">
+                        <label class="radio inline">
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                            男
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                            女
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <textarea rows="4" placeholder="请输入申请理由（不超过200字）"></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" class="btn btn-default btn-block">提交</button>
+                    </div>
+                </div>
+            </form>
+            <div class="navbar-fixed-bottom">
+                <h6 style="color: #fff;">三江学院阿尔法工作室</h6>
             </div>
         </div>
-
-        <div class="control-group">
-            <div class="controls input-prepend ">
-                <span class="add-on"><i class="icon-filter"></i></span>
-                <input type="text" id="inputStudentNumber" placeholder="请输入学号">
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls input-prepend">
-                <span class="add-on"><i class="icon-envelope"></i></span>
-                <input type="tel" id="inputPhone" placeholder="请输入电话号码">
-
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <select>
-                    <option>请选择院系</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <label class="radio inline">
-                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                    男
-                </label>
-                <label class="radio inline">
-                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                    女
-                </label>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <textarea rows="4" placeholder="请输入申请理由（不超过200字）"></textarea>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <button type="button" class="btn btn-default btn-block">提交</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var $backgroundView = $('.background-img');
+        $backgroundView.backgroundBlur({
+            imageURL: '../html/img/background-img.jpg', // URL to the image that will be used for blurring
+            blurAmount: 10, // Amount of blur (higher amount degrades browser performance)
+            imageClass: 'bg-blur', // CSS class that will be applied to the image and to the SVG element,
+            overlayClass: 'bg-blur-overlay', // CSS class of an element that will overlay the blur background (useful for additional effects or putting a spinner)
+            duration: 1000, // If the image needs to be faded in, how long that should take
+            endOpacity: 1 // Specify the final opacity that the image will have
+        });
+    });
+</script>
 </body>
 </html>
