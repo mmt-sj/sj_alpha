@@ -1,5 +1,5 @@
-@import "../bootstrap/css/bootstrap.css";
-@import "../bootstrap/css/bootstrap-theme.css";
+@import "../framework/bootstrap/css/bootstrap.css";
+@import "../framework/bootstrap/css/bootstrap-theme.css";
 body{background-color: #fff; margin: 0px;
     padding:0px;}
 
