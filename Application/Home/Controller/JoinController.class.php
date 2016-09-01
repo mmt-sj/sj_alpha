@@ -9,7 +9,7 @@
 namespace Home\Controller;
 
 use Think\Controller;
-class JoinUsController extends Controller
+class JoinController extends Controller
 {
 
     public function joinUs()
