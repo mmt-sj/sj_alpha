@@ -1,0 +1,216 @@
+<include file="Public:header" />
+<!--角色的查看-->
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#role" role="tab" data-toggle="tab">角色管理</a></li>
+    <li role="presentation"><a href="#addRole" role="tab" data-toggle="tab">添加角色</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="role">
+        <!--初始信息-->
+        <div class="container ">
+            <div class="row ">
+                <div class="col-sm-10 col-sm-offset-1 ">
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>角色名称</th>
+                            <th>角色描述</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        <voList name="alist" id="vo">
+                            <tr>
+                                <td>{$vo['id']}</td>
+                                <td>{$vo['name']}</td>
+                                <td>{$vo['describes']}</td>
+                                <td><php>echo $vo['status']==0?'未启用':'已启用';</php></td>
+                                <td>
+                                    <ul class="list-inline">
+                                        <li><a onclick="setPermissions({$vo['id']})">权限设置</a></li>
+                                        <li>
+                                            <a  data-toggle="modal" data-target="#myModal" onclick="modifi({$vo['id']},'{$vo['name']}','{$vo['describes']}')">修改</a>
+                                        </li>
+                                        <li><a  onclick="ajaxDel('__URL__/del',{id:{$vo['id']}})">删除</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </voList>
+                        </tbody>
+                    </table>
+                    <div class="pages">
+                        {$page}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="addRole">
+        <!--新增-->
+        <div class="container row">
+            <form role="form" id="form1" class="col-sm-6" method="post">
+                <div class="form-group" >
+                    <label for="name">角色名称</label>
+                    <input class="form-control" name="name" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="describes">角色描述</label>
+                    <textarea class="form-control" name="describes" id="describes"></textarea>
+                </div>
+                <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="1" checked>
+                            启用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="0">
+                            禁用
+                        </label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Modal-->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" >
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <form id="form2" method="post" class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <input class="hidden" id="form2Id" name="id">
+                    <div class="form-group" >
+                        <label for="name">角色名称</label>
+                        <input class="form-control" name="name" id="name2">
+                    </div>
+                    <div class="form-group">
+                        <label for="describes" >角色描述</label>
+                        <textarea class="form-control" name="describes" id="describes2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="1" checked>
+                            启用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="0">
+                            禁用
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary" id="submit">提交更改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var jsId='';
+    var jsName='';
+    var jsDescribes='';
+    <!--删除-->
+    function del(id) {
+        bootbox.confirm('是否确定删除',function (result) {
+            if(result){
+                //执行删除操作
+                $.post('__URL__/del',{id:id},function (data) {
+                    if(data.status=='true'){
+                        bootbox.alert(data.result,function () {
+                            window.location.reload();
+                        });
+                    }else {
+                        bootbox.alert(data.result);
+                    }
+                });
+            }
+        })
+    }
+//    编辑
+    function modifi(id,name,describes) {
+        jsId=id;
+        jsName=name;
+        jsDescribes=describes;
+        $('#form2Id').val(jsId);
+        $('#name2').val(jsName);
+        $('#describes2').val(jsDescribes);
+    }
+//    编辑权限
+    function setPermissions(id) {
+        jsId=id;
+    }
+//    JQ开始
+    $(document).ready(function () {
+        $('#form2').bootstrapValidator({
+            message:'',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },fields:{
+                name: {
+                    message: '',
+                    validators: {
+                        notEmpty: {
+                            message: '不能为空!'
+                        },
+                    },
+                },
+            }
+        }).on('success.form.bv',function (e) {
+            e.preventDefault();
+            var $form=$(e.target);
+            var bv = $form.data('bootstrapValidator');
+//            post
+            ajaxEdit('__URL__/edit',$('#form2').serialize());
+        });
+
+        $('#form1').bootstrapValidator({
+            message:'',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },fields: {
+                name: {
+                    message: '',
+                    validators: {
+                        notEmpty: {
+                            message: '不能为空!'
+                        },
+                    },
+                },
+            }
+        }).on('success.form.bv',function (e) {
+            // Prevent form submission
+            e.preventDefault();
+
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            // Use Ajax to submit form data
+            ajaxAdd('__URL__/add',$('#form1').serialize());
+
+        });//验证结束
+    });
+//    JQ结束
+</script>
+<include file="Public:footer" />

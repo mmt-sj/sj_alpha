@@ -1,0 +1,155 @@
+<include file="Public:header" />
+<div class="container ">
+    <div class="row ">
+        <div class="col-sm-10 col-sm-offset-1 ">
+            <div class="btn-toolbar">
+               <div class="btn-group">
+                   <button id="examine" class="btn btn-default btn-sm"> 审核 </button>
+                   <button id="unaudited"  class="btn btn-danger btn-sm">取消审核</button>
+               </div>
+                <div class="btn-group">
+                    <button class="btn btn-default btn-sm" onclick="window.location.replace('__URL__/studentTemp')">查看全部</button>
+                    <button class="btn btn-primary btn-sm" onclick="window.location.replace('__URL__/studentTemp/method/examine')">查看已审核</button>
+                    <button class="btn btn-info btn-sm" onclick="window.location.replace('__URL__/studentTemp/method/unaudited')">查看未审核</button>
+                </div>
+            </div>
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>院系</th>
+                    <th>手机号码</th>
+                    <th>申请时间</th>
+                    <th>理由</th>
+                    <th>状态</th>
+                    <!--<th width="50">操作</th>-->
+                    <!--<th width="50"></th>-->
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                <voList name="alist" id="vo">
+                    <tr>
+                        <td>{$vo['student_id']}</td>
+                        <td>{$vo['student_number']}</td>
+                        <td>{$vo['student_name']}</td>
+                        <td>{$vo['student_sex']}</td>
+                        <td>{$vo['department_name']}</td>
+                        <td>{$vo['phone']}</td>
+                        <td>{$vo['create_time']}</td>
+                        <td class="text-info "><a class="" data-toggle="popover" data-trigger="hover" data-placement="left" data-content={$vo['argument']}><php>$str=$vo['argument'];echo strlen($str)>30?substr($str,0,30).'...':$str;</php></a></td>
+                        <td><php>echo $vo['status']==0?'未审核':'已审核'</php></td>
+                        <!--<td>-->
+                            <!--<button  class="btn btn-default btn-sm">审核</button>-->
+                        <!--</td>-->
+                        <!--<td>-->
+                            <!--<button   class="btn btn-danger btn-sm">取消审核</button>-->
+                        <!--</td>-->
+                    </tr>
+                </voList>
+                </tbody>
+            </table>
+            <div class="pages">
+                {$page}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("[data-toggle='popover']").popover();//启用弹出框bootstrap
+
+    $(function(){
+        function initTableCheckbox() {
+            var $thr = $('table thead tr');
+            var $checkAllTh = $('<th><input type="checkbox" id="checkAll" name="checkAll" /></th>');
+            /*将全选/反选复选框添加到表头最前，即增加一列*/
+            $thr.prepend($checkAllTh);
+            /*“全选/反选”复选框*/
+            var $checkAll = $thr.find('input');
+            $checkAll.click(function(event){
+                /*将所有行的选中状态设成全选框的选中状态*/
+                $tbr.find('input').prop('checked',$(this).prop('checked'));
+                /*并调整所有选中行的CSS样式*/
+                if ($(this).prop('checked')) {
+                    $tbr.find('input').parent().parent().addClass('warning');
+                } else{
+                    $tbr.find('input').parent().parent().removeClass('warning');
+                }
+                /*阻止向上冒泡，以防再次触发点击操作*/
+                event.stopPropagation();
+            });
+            /*点击全选框所在单元格时也触发全选框的点击操作*/
+            $checkAllTh.click(function(){
+                $(this).find('input').click();
+            });
+            var $tbr = $('table tbody tr');
+            var $checkItemTd = $('<td><input type="checkbox" name="checkItem" /></td>');
+            /*每一行都在最前面插入一个选中复选框的单元格*/
+            $tbr.prepend($checkItemTd);
+            /*点击每一行的选中复选框时*/
+            $tbr.find('input').click(function(event){
+                /*调整选中行的CSS样式*/
+                $(this).parent().parent().toggleClass('warning');
+                /*如果已经被选中行的行数等于表格的数据行数，将全选框设为选中状态，否则设为未选中状态*/
+                $checkAll.prop('checked',$tbr.find('input:checked').length == $tbr.length ? true : false);
+                /*阻止向上冒泡，以防再次触发点击操作*/
+                event.stopPropagation();
+            });
+            /*点击每一行时也触发该行的选中操作*/
+            $tbr.click(function(){
+                $(this).find('input').click();
+            });
+        }
+        initTableCheckbox();
+        //获取选中的id 返回格式'1,2,3,5'
+        function getSelectID() {
+            //获取选中的id,使用ajax post到后台数据格式json
+            var $tbr = $('table tbody tr');
+            var $str='';
+            //循环遍历 table tbody tr
+            $tbr.each(function () {
+                if($(this).hasClass('warning')){
+                    //判断该节点是否有warning这个类
+                    //如果有class说明是被选中的并得到id该编辑下的第二个td
+                    $str+=$(this).children('td').eq(1).text()+',';
+                }
+            });
+            if($str.length>0){
+                $str=$str.substring(0,$str.length-1);//去掉最后一个逗号
+            }else {
+                bootbox.alert('至少选择一个操作对象才可执行该命令');
+                return '0';
+            }
+
+            return $str;
+        }
+        function setStudentTemp($method) {
+            var $str=getSelectID();
+            var $data={data:$str,method:$method};//json
+
+            if($str!='0'){
+                $.post('__URL__/setStudentTemp',$data,function (data) {
+                    if(data.status=='true'){
+                        bootbox.alert(data.result,function (result) {
+                            window.location.reload();
+                        });
+                    }else {
+                        bootbox.alert(data.result);
+                    }
+                },'json');
+            }else {
+                return ;
+            }
+        }
+        //点击审核事件
+        $('#examine').click(function () {
+            setStudentTemp('examine');
+        });//examine click结束
+        $('#unaudited').click(function () {
+            setStudentTemp('unaudited');
+        });
+    });//jq结束
+</script>
+<include file="Public:footer" />

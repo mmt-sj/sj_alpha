@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var SITE_URL='<php>echo SITE_URL;</php>';
+    var UPLOAD_URL='<php>echo UPLOAD_URL;</php>';
+    function Jump() {
+        window.location.href='{$jumpUrl}';
+    }
+    document.onload=setTimeout("Jump()",{$waitSecond}*1000);
+</script>
+
+<span>成功</span>
+<span>{$message}</span>
+</body>
+
+</html>

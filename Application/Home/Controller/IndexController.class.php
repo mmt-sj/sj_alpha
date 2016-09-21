@@ -3,6 +3,61 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        $this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px } a,a:hover{color:blue;}</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>欢迎使用 <b>ThinkPHP</b>！</p><br/>版本 V{$Think.version}</div><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_55e75dfae343f5a1"></thinkad><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script>','utf-8');
+        $this->display();
+        if(IS_POST){
+            $this->assign('jumpUrl',U('Home/Public/success'));
+            $this->success('操作');
+        }
+    }
+
+    /**
+     * this is method will show a join us form page (go to View/Index/jpin.html)
+     */
+    public function join(){
+
+        $this->assign('title','欢迎加入我们');
+
+        $department=D('Department');
+        $list=$department->select();
+        $this->assign('alist',$list);
+        $this->display();
+        if(IS_POST){
+            $studentTemp=M('StudentTemp');
+            $studentNumber=$_POST['student_number'];
+            //find this student_number
+            $where['student_number']=$studentNumber;
+            $result=$studentTemp->where($where)->select();
+            if(!$result){
+                if($datas=$studentTemp->create()){
+                    $datas['create_time']= date("Y-m-d H:i:s",time());
+                    $studentTemp->add($datas);
+                    $data['status']='true';
+                    $this->ajaxReturn($data,'json',1);
+                }else{
+                    $data['status']='false';
+                    $this->ajaxReturn(0,'json',0);
+                }
+            }else{
+                $data['status']='false';
+                $this->ajaxReturn(0,'json',0);
+            }
+        }
+    }
+    /*
+     * 判断
+     */
+    public function existStudentNumber(){
+        if(IS_POST){
+            $studentTemp=M('StudentTemp');
+            $studentNumber=$_POST['student_number'];
+            //find this student_number
+            $where['student_number']=$studentNumber;
+            $result=$studentTemp->where($where)->select();
+            if(!$result){
+                echo '{"valid":true}';
+            }else{
+                echo '{"valid":false}';
+            }
+        }
     }
 }
